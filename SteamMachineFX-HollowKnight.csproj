@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project=".\HKpathdiscovery.props" />
+  
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>SteamMachineFX_HollowKnight</AssemblyName>
+    <Product>My first plugin</Product>
+    <Version>1.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <RootNamespace>SteamMachineFX_HollowKnight</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="System.Text.Json" Version="10.0.10" />
+    <PackageReference Include="UnityEngine.Modules" Version="2020.2.2" IncludeAssets="compile" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+<!--      <HintPath>..\..\Library\Application Support\Steam\steamapps\common\Hollow Knight\hollow_knight.app\Contents\Resources\Data\Managed\Assembly-CSharp.dll</HintPath>-->
+      <HintPath>..\..\Library\Application Support\Steam\steamapps\common\Hollow Knight\Assembly-CSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="InstallToGameOnBuild" AfterTargets="PostBuildEvent">
+    <Message Text="Installing built dll to Hollow Knight..." Importance="high" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)/" />
+  </Target>
+</Project>

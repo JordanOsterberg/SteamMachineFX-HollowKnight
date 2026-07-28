@@ -1,0 +1,21 @@
+<Project>
+    <!--
+      Fills HKPath when not set (e.g. no local.props).
+      Override via local.props or MSBuild /p:HKPath=...
+    -->
+    <!-- OS Detection -->
+    <PropertyGroup>
+        <IsLinux>false</IsLinux>
+        <IsOSX>false</IsOSX>
+        <IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
+        <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
+    </PropertyGroup>
+
+    <!-- macOS -->
+    <PropertyGroup Condition="'$(IsOSX)' == 'true'">
+        <SteamLibraryPath Condition="'$(SteamLibraryPath)' == ''">$(HOME)/Library/Application Support/Steam/steamapps</SteamLibraryPath>
+        <HKPath Condition="'$(HKPath)' == ''">$(SteamLibraryPath)/common/Hollow Knight</HKPath>
+
+        <ModsPath>$(HKPath)/BepInEx/plugins/</ModsPath>
+    </PropertyGroup>
+</Project>
